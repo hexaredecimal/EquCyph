@@ -39,7 +39,11 @@ public class EquCyph extends JFrame implements ActionListener {
 		JMenu recent = new JMenu("Recent");
 
 		JMenuItem clearGraph = new JMenuItem("Clear Graph");
-		clearGraph.addActionListener(this);
+		clearGraph.addActionListener(action -> {
+			plane.getFunctionList().clear();
+			plane.repaint();
+			populateTree();
+		});
 
 		JMenuItem exit = new JMenuItem("Exit");
 		exit.addActionListener(this);
@@ -90,15 +94,18 @@ public class EquCyph extends JFrame implements ActionListener {
 
 		JMenu new_fx = new JMenu("new");
 
-		String[] graphtypes = {"Advanced", "Cubic", "Hyperbolic", "Line", "Parabolic"};
+		String[] graphtypes = {"Cubic", "Hyperbolic", "Line", "Parabolic", "_", "Advanced"};
 		for (String type : graphtypes) {
+			if (type.equals("_")) {
+				new_fx.add(new JSeparator());
+				continue;
+			}
 			JMenuItem graphtype = new JMenuItem(type);
 			graphtype.addActionListener(this);
 			new_fx.add(graphtype);
 		}
 		
 		popupMenu.add(new_fx);
-		popupMenu.add(new JSeparator());
 		popupMenu.add(remove);
 		popupMenu.add(new JSeparator());
 		popupMenu.add(edit);
