@@ -22,8 +22,8 @@ public class MouseEvents implements MouseListener{
 	public void mouseClicked(MouseEvent e) {
 		if (SwingUtilities.isRightMouseButton(e)) {
 			System.out.println("Here");
-			//int row = tree.getClosestRowForLocation(e.getX(), e.getY());
-			//tree.setSelectionRow(row);
+			int row = tree.getClosestRowForLocation(e.getX(), e.getY());
+			tree.setSelectionRow(row);
 			popupMenu.show(e.getComponent(), e.getX(), e.getY());
 		}
 	}
