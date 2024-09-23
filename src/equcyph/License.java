@@ -1,37 +1,47 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package equcyph;
 
 /**
  *
- * @author ERC
+ * @author Hexaredecimal
  */
 public class License {
     static String contents = 
-"<html>MIT License<br>" +
-"<br>"+
-"Copyright (c) [2023] [HexAreDecimal]<br>"+
-"Copyright (c) [2023] [Hugs_Coding]<br>"+
-"<br>"+
-"<br>"+
-"Permission is hereby granted, free of charge, to any person obtaining a copy<br>"+
-"of this software and associated documentation files (the \"Software\"), to deal<br>"+
-"in the Software without restriction, including without limitation the rights<br>"+
-"to use, copy, modify, merge, publish, distribute, sublicense, and/or sell<br>"+
-"copies of the Software, and to permit persons to whom the Software is<br>"+
-"furnished to do so, subject to the following conditions:<br>"+
-"<br>"+
-"The above copyright notice and this permission notice shall be included in all<br>"+
-"copies or substantial portions of the Software.<br>"+
-"<br>"+
-"THE SOFTWARE IS PROVIDED \"AS IS\"+ WITHOUT WARRANTY OF ANY KIND, EXPRESS OR<br>"+
-"IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,<br>"+
-"FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE<br>"+
-"AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER<br>"+
-"LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,<br>"+
-"OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE<br>"+
-"SOFTWARE.<br></html>";
-
+"""
+<html>
+<h3>SOFTWARE LICENSE AGREEMENT</h3>
+<br>
+This Software License Agreement ("Agreement") is made and entered into as of 2024-06-01 ("Effective Date") <br>
+by and between Hexarevision Tech, registered-company, having its principal place of business at <br>
+156 Pholani, Intabazwe, Harrismith, 9880, South Africa ("Licensor"), and User, private-person, having <br> 
+its principal place of business at , worldwide ("Licensee"). <br>
+<br>
+WHEREAS, Licensor owns certain software that it desires to license to Licensee; <br>
+<br>
+WHEREAS, Licensee desires to use such software under the terms and conditions set forth herein. <br>
+<br>
+NOW, THEREFORE, in consideration of the mutual promises contained herein and for other good and valuable <br>
+consideration, the receipt and sufficiency of which are hereby acknowledged, the parties agree as follows: <br>
+1. Definition of Software: <br>
+<br>
+The term "Software" refers to the EquCyph, including any updates, modifications, or associated documentation provided by Licensor.<br>
+2. Grant of License:<br>
+<br>
+Subject to the terms and conditions of this Agreement, Licensor hereby grants to Licensee a limited <br>
+to applications license to use the Software.<br>
+3. Derivative Works:<br>
+<br>
+No modifications or derivative works are allowed.<br>
+4. Commercial Use:<br>
+<br>
+Commercial use is not allowed.<br>
+5. Attribution:<br>
+<br>
+..... <br>
+Read more at <a href="https://github.com/hexaredecimal/EquCyph/blob/main/LICENCE">https://github.com/hexaredecimal/EquCyph/blob/main/LICENCE</a><br>
+<br>
+Licensor: Hexarevision Tech<br>
+<br>
+Licensee: User<br>
+</html>
+""";
 }
