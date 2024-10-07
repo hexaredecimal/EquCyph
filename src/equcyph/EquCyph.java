@@ -15,8 +15,14 @@ public class EquCyph extends JFrame implements ActionListener {
 	private JTree functions_tree;
 	private LinkedList<String> plotted = new LinkedList<>();
 	private LinkedList<Color> plottedColors = new LinkedList<>();
-	private JPopupMenu popupMenu;
+	private JPopupMenu functionNodePopUp;
+	private JPopupMenu functionParent;
+	private static DefaultMutableTreeNode selection = null;
 
+	public static void setTreeSelection(DefaultMutableTreeNode node) {
+		selection = node;
+	}
+	
 	private void addMenus() {
 		JMenuBar menubar = new JMenuBar();
 		setJMenuBar(menubar);
@@ -86,10 +92,40 @@ public class EquCyph extends JFrame implements ActionListener {
 	}
 
 	private void addPopUpMenus() {
-		popupMenu = new JPopupMenu("Options");
+		functionNodePopUp = new JPopupMenu("Options");
+		functionParent = new JPopupMenu("All functions");
+
+		JMenuItem info = new JMenuItem("Info");
+		JMenuItem delete = new JMenuItem("Delete");
+		delete.addActionListener(action -> {
+			if (selection == null)
+				return; 
+
+			String fx_def = selection.toString(); 
+			var fx_list = plane.getFunctionList();
+			for (var func: fx_list) {
+				if (!fx_def.equals(func.toString())) {
+					continue;
+				}
+				
+				fx_list.remove(func);
+				DefaultTreeModel model = (DefaultTreeModel) functions_tree.getModel();
+				DefaultMutableTreeNode top = (DefaultMutableTreeNode) model.getRoot();
+				top.remove(selection);
+				plane.repaint();
+				populateTree();
+			}
+			
+		});
 		
-		JMenuItem remove = new JMenuItem("Info");
-		JMenuItem edit = new JMenuItem("Delete");
+		
+		JMenuItem deleteAll = new JMenuItem("Delete All");
+		deleteAll.addActionListener(action -> {
+			plane.getFunctionList().clear();
+			plane.repaint();
+			populateTree();
+		});
+
 		JMenuItem props = new JMenuItem("Properties");
 
 		JMenu new_fx = new JMenu("new");
@@ -104,15 +140,17 @@ public class EquCyph extends JFrame implements ActionListener {
 			graphtype.addActionListener(this);
 			new_fx.add(graphtype);
 		}
-		
-		popupMenu.add(new_fx);
-		popupMenu.add(remove);
-		popupMenu.add(new JSeparator());
-		popupMenu.add(edit);
-		popupMenu.add(new JSeparator());
-		popupMenu.add(props);
+
+		functionParent.add(new_fx);
+		functionParent.add(deleteAll);
+
+		functionNodePopUp.add(info);
+		functionNodePopUp.add(new JSeparator());
+		functionNodePopUp.add(delete);
+		functionNodePopUp.add(new JSeparator());
+		functionNodePopUp.add(props);
 	}
-	
+
 	public void plotFunction(String name, String equation, Color style) {
 		Function f = new Function(equation, name);
 		f.setColor(style);
@@ -131,13 +169,8 @@ public class EquCyph extends JFrame implements ActionListener {
 		plane = new Plane();
 
 		functions_tree = new JTree();
-		functions_tree.addMouseListener(
-			new MouseEvents(functions_tree, popupMenu)
-		);
-		
-		
+		functions_tree.addMouseListener(new MouseEvents(functions_tree, functionNodePopUp, functionParent));
 
-		
 		JSplitPane split = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
 		split.add(functions_tree);
 		split.add(plane);
@@ -160,7 +193,6 @@ public class EquCyph extends JFrame implements ActionListener {
 	}
 
 	public final void populateTree() {
-		//tree.removeAll();
 		DefaultTreeModel model = (DefaultTreeModel) functions_tree.getModel();
 		DefaultMutableTreeNode top = new DefaultMutableTreeNode("functions");
 		top.removeAllChildren();
@@ -168,27 +200,25 @@ public class EquCyph extends JFrame implements ActionListener {
 		model.setRoot(top);
 
 		var functions = plane.getFunctionList();
-		
-		
-		for (var fx: functions) {
-			DefaultMutableTreeNode node = new DefaultMutableTreeNode(fx.getName() + "=" + fx.getDefinition());
+
+		for (var fx : functions) {
+			DefaultMutableTreeNode node = new DefaultMutableTreeNode(fx.getName() + " = " + fx.getDefinition());
 			top.add(node);
 		}
 	}
 
-  private void setLookAndFeel() {
-    try {
-      for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-        if ("Nimbus".equals(info.getName())) {
-          javax.swing.UIManager.setLookAndFeel(info.getClassName());
-          break;
-        }
-      }
-    } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
-      java.util.logging.Logger.getLogger(EquCyph.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-    }
-  }
-
+	private void setLookAndFeel() {
+		try {
+			for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+				if ("Nimbus".equals(info.getName())) {
+					javax.swing.UIManager.setLookAndFeel(info.getClassName());
+					break;
+				}
+			}
+		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
+			java.util.logging.Logger.getLogger(EquCyph.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+		}
+	}
 
 	public static void main(String[] args) {
 		new EquCyph();
@@ -198,6 +228,7 @@ public class EquCyph extends JFrame implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		String invoker = e.getActionCommand();
 
+		System.out.println("Found: " + invoker);
 		switch (invoker) {
 			case "Advanced":
 				Advanced adv = new Advanced(this);
@@ -206,7 +237,8 @@ public class EquCyph extends JFrame implements ActionListener {
 
 			case "Contributors": {
 
-				String message = 
+				String message
+					= 
 """
 <html>
 	<h1 align="center">Equcyph</h1>
@@ -221,7 +253,7 @@ public class EquCyph extends JFrame implements ActionListener {
 			}
 			break;
 			case "About": {
-				String message = "<html>EquCyph - The Cross-platform Mathemetics equation parser and plotter<br>";
+				String message = "<html>EquCyph - The Cross-platform Mathemetics equation parser and plotter<br></html>";
 				JOptionPane.showMessageDialog(this, message, invoker, JOptionPane.INFORMATION_MESSAGE);
 			}
 			break;
@@ -238,6 +270,13 @@ public class EquCyph extends JFrame implements ActionListener {
 			case "Parabolic":
 				Parabolic prb = new Parabolic(this);
 				prb.setVisible(true);
+				break;
+			case "Cubic":
+				Cubic cbc = new Cubic(this);
+				cbc.setVisible(true);
+				break;
+			case "Exit":
+				System.exit(0);
 				break;
 			default:
 				break;
