@@ -127,6 +127,24 @@ public class EquCyph extends JFrame implements ActionListener {
 		});
 
 		JMenuItem props = new JMenuItem("Properties");
+		props.addActionListener(action -> {
+			if (selection == null)
+				return; 
+
+			String fx_def = selection.toString(); 
+			var fx_list = plane.getFunctionList();
+			for (int index = 0; index < fx_list.size(); index++) {
+				var func = fx_list.get(index);
+				if (!fx_def.equals(func.toString())) {
+					continue;
+				}
+				
+				new Properties(plane, index, func)
+					.setVisible(true);
+				populateTree();
+			}
+		});
+
 
 		JMenu new_fx = new JMenu("new");
 
