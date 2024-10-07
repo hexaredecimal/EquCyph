@@ -5,8 +5,9 @@ package equcyph;
  * @author Hexaredecimal
  */
 public class License {
-    static String contents = 
-"""
+
+	static String contents
+		= """
 <html>
 <h3>SOFTWARE LICENSE AGREEMENT</h3>
 <br>
