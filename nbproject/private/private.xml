@@ -3,9 +3,14 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/ERC/Desktop/EquCyph/EquCyph/src/equcyph/Advanced.java</file>
-            <file>file:/C:/Users/ERC/Desktop/EquCyph/EquCyph/src/equcyph/EquCyph.java</file>
-            <file>file:/C:/Users/ERC/Desktop/EquCyph/EquCyph/src/equcyph/LineGraph.java</file>
+            <file>file:/home/hexaredecimal/Projects/EquCyph/src/equcyph/Parabolic.java</file>
+            <file>file:/home/hexaredecimal/Projects/EquCyph/src/equcyph/Function.java</file>
+            <file>file:/home/hexaredecimal/Projects/EquCyph/src/equcyph/MouseEvents.java</file>
+            <file>file:/home/hexaredecimal/Projects/EquCyph/src/equcyph/Hyperbolic.java</file>
+            <file>file:/home/hexaredecimal/Projects/EquCyph/src/equcyph/Cubic.java</file>
+            <file>file:/home/hexaredecimal/Projects/EquCyph/src/equcyph/Properties.java</file>
+            <file>file:/home/hexaredecimal/Projects/EquCyph/src/equcyph/EquCyph.java</file>
+            <file>file:/home/hexaredecimal/Projects/EquCyph/src/equcyph/License.java</file>
         </group>
     </open-files>
 </project-private>
