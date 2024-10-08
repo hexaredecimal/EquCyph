@@ -12,10 +12,11 @@ public class Properties extends javax.swing.JFrame {
 	/**
 	 * Creates new form Properties
 	 */
-	public Properties(Plane plane, int index, Function func) {
+	public Properties(EquCyph parent, Plane plane, int index, Function func) {
 		initComponents();
 		this.plane = plane; 
 		this.index = index;
+		this.parent = parent;
 		
 		tf_fx_def.setText(func.getDefinition());
 		tf_fx_name.setText(func.getName());
@@ -206,16 +207,20 @@ public class Properties extends javax.swing.JFrame {
 		lbl_error.setEnabled(false);
 		lbl_error.setText("*");
 		
-		function.setName(name);
-		function.setDefinition(def);
-		function.setColor(color);
+		plane.getFunctionList().remove(function);
 		plane.repaint();
+		//function.setName(name);
+		//function.setDefinition(def);
+		//function.setColor(color);
+		//plane.plot(function);
+		parent.plotFunction(name, def, color);
 		this.dispose();
   }//GEN-LAST:event_btn_applyActionPerformed
 
 	private HashMap<String, Color> colortable = new HashMap<>();
 	private int index; 
 	private Plane plane; 
+	private EquCyph parent; 
   // Variables declaration - do not modify//GEN-BEGIN:variables
   private javax.swing.JButton btn_apply;
   private javax.swing.JButton btn_cancel;
