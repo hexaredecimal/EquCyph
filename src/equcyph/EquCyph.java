@@ -139,9 +139,8 @@ public class EquCyph extends JFrame implements ActionListener {
 					continue;
 				}
 				
-				new Properties(plane, index, func)
+				new Properties(this, plane, index, func)
 					.setVisible(true);
-				populateTree();
 			}
 		});
 
@@ -246,7 +245,6 @@ public class EquCyph extends JFrame implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		String invoker = e.getActionCommand();
 
-		System.out.println("Found: " + invoker);
 		switch (invoker) {
 			case "Advanced":
 				Advanced adv = new Advanced(this);
@@ -265,13 +263,30 @@ public class EquCyph extends JFrame implements ActionListener {
 	<br>
 	<h3>Contributors</h3>
 	<p><b>Hugs_Coding</b></p>
-</html>
+</htaml>
 """;
 				JOptionPane.showMessageDialog(this, message, invoker, JOptionPane.INFORMATION_MESSAGE);
 			}
 			break;
 			case "About": {
-				String message = "<html>EquCyph - The Cross-platform Mathemetics equation parser and plotter<br></html>";
+				String art = 
+"""
+<br>
+<p>   Y<p>
+<p>   ^</p>
+<p>   |                ^</p>
+<p>   |               /</p>
+<p>2  |     +     /</p>
+<p>   |	     / \\   / </p>
+<p>   |	    /   \\ /  </p>
+<p>1  |   /     +    </p>
+<p>   |  /					</p>
+<p>   | *</p>
+<p>   +-----------------------------------> X</p> 
+<p>   0          1        2         3 <p><br>
+<h4> Version <b>2.0 - 2024 Edition</b></h4>
+""".replaceAll(" ", "&nbsp;");
+				String message = String.format("<html>EquCyph - The Cross-platform Mathemetics <br>equation parser and plotter<br>%s</html>", art);
 				JOptionPane.showMessageDialog(this, message, invoker, JOptionPane.INFORMATION_MESSAGE);
 			}
 			break;
