@@ -5,23 +5,30 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseListener;
+import java.util.HashMap;
 import java.util.LinkedList;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 
 public class EquCyph extends JFrame implements ActionListener {
 
-	private Plane plane;
+	private HashMap<Integer, Plane> tabPlanes;
 	private JTree functions_tree;
 	private LinkedList<String> plotted = new LinkedList<>();
 	private LinkedList<Color> plottedColors = new LinkedList<>();
-	private JPopupMenu functionNodePopUp;
-	private JPopupMenu functionParent;
+	private JPopupMenu functionNodePopUp = new JPopupMenu("Options");
+	private JPopupMenu functionParent = new JPopupMenu("All functions");
+	private JTabbedPane tabs;
 	private static DefaultMutableTreeNode selection = null;
 
 	public static void setTreeSelection(DefaultMutableTreeNode node) {
 		selection = node;
 	}
+
+	public HashMap<Integer, Plane> getTabPlanes() {
+		return tabPlanes;
+	}
+	
 	
 	private void addMenus() {
 		JMenuBar menubar = new JMenuBar();
@@ -46,6 +53,8 @@ public class EquCyph extends JFrame implements ActionListener {
 
 		JMenuItem clearGraph = new JMenuItem("Clear Graph");
 		clearGraph.addActionListener(action -> {
+			int selectedIndex = tabs.getSelectedIndex();
+			Plane plane = tabPlanes.get(selectedIndex);
 			plane.getFunctionList().clear();
 			plane.repaint();
 			populateTree();
@@ -75,6 +84,25 @@ public class EquCyph extends JFrame implements ActionListener {
 			tools.add(graphtype);
 		}
 
+		JMenu layout = new JMenu("Layout");
+		menubar.add(layout);
+		
+		JMenuItem addtab = new JMenuItem("New Tab");
+		addtab.addActionListener(action -> {
+			addTab(tabs);
+		});
+		layout.add(addtab); 
+		
+		JMenuItem removeTab = new JMenuItem("Remove Tab"); 
+		removeTab.addActionListener(action -> {
+			int i = tabs.getSelectedIndex();
+			if (i != -1) {
+				tabPlanes.remove(i);
+				tabs.remove(i);
+			}
+		});
+		layout.add(removeTab);
+		
 		JMenu help = new JMenu("Help");
 		menubar.add(help);
 
@@ -92,9 +120,8 @@ public class EquCyph extends JFrame implements ActionListener {
 	}
 
 	private void addPopUpMenus() {
-		functionNodePopUp = new JPopupMenu("Options");
-		functionParent = new JPopupMenu("All functions");
-
+		int selectedIndex = tabs.getSelectedIndex();
+		Plane plane = tabPlanes.get(selectedIndex);
 		JMenuItem info = new JMenuItem("Info");
 		JMenuItem delete = new JMenuItem("Delete");
 		delete.addActionListener(action -> {
@@ -169,6 +196,14 @@ public class EquCyph extends JFrame implements ActionListener {
 	}
 
 	public void plotFunction(String name, String equation, Color style) {
+		int selectedIndex = tabs.getSelectedIndex();
+
+		if (selectedIndex == -1) {
+			addTab(tabs);
+		}
+		selectedIndex = tabs.getSelectedIndex();
+		
+		Plane plane = tabPlanes.get(selectedIndex);
 		Function f = new Function(equation, name);
 		f.setColor(style);
 		plane.plot(f);
@@ -178,23 +213,31 @@ public class EquCyph extends JFrame implements ActionListener {
 	public EquCyph() {
 		super("EquCyph");
 		setLookAndFeel();
-		addMenus();
-		addPopUpMenus();
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setSize(900, 600);
 
-		plane = new Plane();
+		tabPlanes = new HashMap<>();  // Initialize the HashMap
 
 		functions_tree = new JTree();
 		functions_tree.addMouseListener(new MouseEvents(functions_tree, functionNodePopUp, functionParent));
 
 		JSplitPane split = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
 		split.add(functions_tree);
-		split.add(plane);
+
+		tabs = new JTabbedPane();
+		tabs.setTabLayoutPolicy(JTabbedPane.WRAP_TAB_LAYOUT);
+		// Add multiple tabs, each with its own Plane
+		addTab(tabs);
+
+		tabs.addChangeListener(e -> {
+			int selectedIndex = tabs.getSelectedIndex();
+			System.out.println("Tab: " + selectedIndex);
+			System.out.println("" + tabPlanes);
+			//Plane selectedPlane = tabPlanes.get(selectedIndex);
+			//split.setRightComponent(selectedPlane);  // Show the correct Plane in the split pane
+		});
+
+		split.add(tabs);
 		add(split);
 
-		plane.setScaleInX(1);
-		plane.setScaleInY(1);
 
 		DefaultTreeModel model = (DefaultTreeModel) functions_tree.getModel();
 		DefaultMutableTreeNode top = new DefaultMutableTreeNode("functions");
@@ -202,20 +245,37 @@ public class EquCyph extends JFrame implements ActionListener {
 		model.reload();
 		model.setRoot(top);
 
-		// Enable grid in plane
-		plane.setShowGrid(true);
 
+		addMenus();
+		addPopUpMenus();
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setSize(900, 600);
 		setLocationRelativeTo(null);
 		setVisible(true);
 	}
 
+	private void addTab(JTabbedPane tabs) {
+		Plane plane = new Plane();
+		plane.setScaleInX(1);
+		plane.setScaleInY(1);
+		plane.setShowGrid(true);
+
+		int tabIndex = tabs.getTabCount();
+		tabPlanes.put(tabIndex, plane);  // Associate the Plane with the tab index
+
+		tabs.add(String.format("Graph %d", tabIndex + 1),plane);
+		tabs.setTabComponentAt(tabIndex, new ButtonTabComponent(this, tabs));
+	}
+
+	
 	public final void populateTree() {
 		DefaultTreeModel model = (DefaultTreeModel) functions_tree.getModel();
 		DefaultMutableTreeNode top = new DefaultMutableTreeNode("functions");
 		top.removeAllChildren();
 		model.reload();
 		model.setRoot(top);
-
+		int selectedIndex = tabs.getSelectedIndex();
+		Plane plane = tabPlanes.get(selectedIndex);
 		var functions = plane.getFunctionList();
 
 		for (var fx : functions) {
