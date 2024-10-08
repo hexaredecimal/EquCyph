@@ -242,8 +242,8 @@ public class Hyperbolic extends javax.swing.JFrame {
 			String xShift = jTextField2.getText();
 			String yShift = jTextField4.getText();
 
-			xShift = xShift.equals("") || xShift.length() == 0 ? "0" : xShift;
-			yShift = yShift.equals("") || yShift.length() == 0 ? "0" : yShift;
+			xShift = xShift.isBlank() ? "0" : xShift;
+			yShift = yShift.isBlank() ? "0" : yShift;
 
 			String eq_body = head + " / ( x + " + xShift + ") + " + yShift;
 
