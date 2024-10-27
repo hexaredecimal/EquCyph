@@ -1,5 +1,8 @@
 package equcyph;
 
+import com.formdev.flatlaf.FlatDarkLaf;
+import com.formdev.flatlaf.FlatLaf;
+import com.formdev.flatlaf.FlatLightLaf;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -94,14 +97,14 @@ public class EquCyph extends JFrame implements ActionListener {
 			file.add(clearGraph);
 			file.add(exit);
 
-			JMenu tools = new JMenu("Tools");
-			menubar.add(tools);
+			JMenu graphs = new JMenu("Graphs");
+			menubar.add(graphs);
 
 			String[] graphtypes = {"Advanced", "Cubic", "Hyperbolic", "Line", "Parabolic"};
 			for (String type : graphtypes) {
 				JMenuItem graphtype = new JMenuItem(type, type.equals("Advanced") ? lambda_icon : formula_icon);
 				graphtype.addActionListener(this);
-				tools.add(graphtype);
+				graphs.add(graphtype);
 			}
 
 			JMenu layout = new JMenu("Layout");
@@ -123,6 +126,24 @@ public class EquCyph extends JFrame implements ActionListener {
 			});
 			layout.add(removeTab);
 
+			JMenu themes = new JMenu("Themes"); 
+			JMenuItem light = new JMenuItem("Light mode");
+			light.addActionListener(action -> {
+				FlatLightLaf.setup();
+				FlatLaf.updateUI();
+			});
+
+			JMenuItem dark = new JMenuItem("Dark mode");
+			dark.addActionListener(action -> {
+				FlatDarkLaf.setup();
+				FlatLaf.updateUI();
+			});
+
+			themes.add(dark);
+			themes.add(light); 
+			layout.add(themes);
+			
+			
 			JMenu help = new JMenu("Help");
 			menubar.add(help);
 
@@ -318,19 +339,10 @@ public class EquCyph extends JFrame implements ActionListener {
 	}
 
 	private void setLookAndFeel() {
-		try {
-			for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-				if ("Nimbus".equals(info.getName())) {
-					javax.swing.UIManager.setLookAndFeel(info.getClassName());
-					break;
-				}
-			}
-		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
-			java.util.logging.Logger.getLogger(EquCyph.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-		}
+		FlatDarkLaf.setup();
 	}
 
-	public static void main(String[] args) {
+	public static void start(String[] args) {
 		new EquCyph();
 	}
 
