@@ -10,8 +10,10 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseListener;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Vector;
 import javax.imageio.ImageIO;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
@@ -126,7 +128,7 @@ public class EquCyph extends JFrame implements ActionListener {
 			});
 			layout.add(removeTab);
 
-			JMenu themes = new JMenu("Themes"); 
+			JMenu themes = new JMenu("Themes");
 			JMenuItem light = new JMenuItem("Light mode");
 			light.addActionListener(action -> {
 				FlatLightLaf.setup();
@@ -140,10 +142,9 @@ public class EquCyph extends JFrame implements ActionListener {
 			});
 
 			themes.add(dark);
-			themes.add(light); 
+			themes.add(light);
 			layout.add(themes);
-			
-			
+
 			JMenu help = new JMenu("Help");
 			menubar.add(help);
 
@@ -177,8 +178,6 @@ public class EquCyph extends JFrame implements ActionListener {
 	private void addPopUpMenus() {
 		var formula_icon = new ImageIcon(this.getClass().getResource("/icons/formula-fx-16.png"));
 		var lambda_icon = new ImageIcon(this.getClass().getResource("/icons/lambda-16.png"));
-		int selectedIndex = tabs.getSelectedIndex();
-		Plane plane = tabPlanes.get(selectedIndex);
 		JMenuItem info = new JMenuItem("Info");
 		JMenuItem delete = new JMenuItem("Delete");
 		delete.addActionListener(action -> {
@@ -187,26 +186,35 @@ public class EquCyph extends JFrame implements ActionListener {
 			}
 
 			String fx_def = selection.toString();
-			var fx_list = plane.getFunctionList();
-			for (var func : fx_list) {
-				if (!fx_def.equals(func.toString())) {
-					continue;
+			out:
+			for (var key : tabPlanes.keySet()) {
+				Plane pl = tabPlanes.get(key);
+				var functions = pl.getFunctionList();
+				for (int i = 0; i < functions.size(); i++) {
+					var func = functions.get(i);
+					if (!fx_def.equals(func.toString())) {
+						continue;
+					}
+					System.out.println("YYYY");
+					functions.remove(func);
+					DefaultTreeModel model = (DefaultTreeModel) functions_tree.getModel();
+					DefaultMutableTreeNode top = (DefaultMutableTreeNode) model.getRoot();
+					top.remove(selection);
+					pl.repaint();
+					populateTree();
+					break out;
 				}
-
-				fx_list.remove(func);
-				DefaultTreeModel model = (DefaultTreeModel) functions_tree.getModel();
-				DefaultMutableTreeNode top = (DefaultMutableTreeNode) model.getRoot();
-				top.remove(selection);
-				plane.repaint();
-				populateTree();
 			}
 
 		});
 
 		JMenuItem deleteAll = new JMenuItem("Delete All");
 		deleteAll.addActionListener(action -> {
-			plane.getFunctionList().clear();
-			plane.repaint();
+			for (var key : tabPlanes.keySet()) {
+				Plane pl = tabPlanes.get(key);
+				pl.getFunctionList().clear();
+				pl.repaint();
+			}
 			populateTree();
 		});
 
@@ -217,15 +225,20 @@ public class EquCyph extends JFrame implements ActionListener {
 			}
 
 			String fx_def = selection.toString();
-			var fx_list = plane.getFunctionList();
-			for (int index = 0; index < fx_list.size(); index++) {
-				var func = fx_list.get(index);
-				if (!fx_def.equals(func.toString())) {
-					continue;
-				}
+			out:
+			for (var key : tabPlanes.keySet()) {
+				Plane pl = tabPlanes.get(key);
+				var fx_list = pl.getFunctionList();
+				for (int index = 0; index < fx_list.size(); index++) {
+					var func = fx_list.get(index);
+					if (!fx_def.equals(func.toString())) {
+						continue;
+					}
 
-				new Properties(this, plane, index, func)
-					.setVisible(true);
+					new Properties(this, pl, index, func)
+						.setVisible(true);
+					break out;
+				}
 			}
 		});
 
@@ -328,11 +341,14 @@ public class EquCyph extends JFrame implements ActionListener {
 		top.removeAllChildren();
 		model.reload();
 		model.setRoot(top);
-		int selectedIndex = tabs.getSelectedIndex();
-		Plane plane = tabPlanes.get(selectedIndex);
-		var functions = plane.getFunctionList();
+		Vector<Function> all_functions = new Vector<>();
 
-		for (var fx : functions) {
+		for (var key : tabPlanes.keySet()) {
+			Plane pl = tabPlanes.get(key);
+			all_functions.addAll(pl.getFunctionList());
+		}
+
+		for (var fx : all_functions) {
 			DefaultMutableTreeNode node = new DefaultMutableTreeNode(fx.getName() + " = " + fx.getDefinition());
 			top.add(node);
 		}
