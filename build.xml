@@ -10,6 +10,24 @@
 <project name="EquCyph" default="default" basedir=".">
     <description>Builds, tests, and runs the project EquCyph.</description>
     <import file="nbproject/build-impl.xml"/>
+
+		<target name="-post-jar">
+			<echo message="Building standalone jar file: ${dist.dir}/Equcyph-dist.jar"/>
+			<jar destfile="${dist.dir}/Equcyph-tmp-fat.jar" filesetmanifest="skip">
+				<zipgroupfileset dir="${dist.dir}"  includes="*.jar*"/>
+				<zipgroupfileset dir="${dist.dir}/lib"  includes="*.jar*"/>
+				<manifest>
+					<attribute name="Main-Class" value="equcyph.Launcher" />
+				</manifest>
+			</jar>
+			<zip destfile="${dist.dir}/Equcyph-dist.jar">
+				<zipfileset src="${dist.dir}/Equcyph-tmp-fat.jar" 
+										excludes="META-INF/*.SF, META-INF/*.DSA, META-INF/*.RSA"/>
+			</zip>
+			<delete file="${dist.dir}/Equcyph-tmp-fat.jar" />
+		</target>
+		
+		
     <!--
 
     There exist several targets which are by default empty and which can be 
