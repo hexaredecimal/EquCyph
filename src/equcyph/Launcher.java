@@ -20,7 +20,10 @@ public class Launcher {
 			public void actionPerformed(ActionEvent e) {
 				// splash.dispatchEvent(new WindowEvent(splash, WindowEvent.WINDOW_CLOSING));
 				splash.dispose();
-				new EquCyph();
+				SwingUtilities.invokeLater(() -> {
+					new EquCyph();
+				});
+
 			}
 		});
 
