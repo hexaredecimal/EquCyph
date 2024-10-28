@@ -283,7 +283,8 @@ public class EquCyph extends JFrame implements ActionListener {
 	public EquCyph() {
 		super("EquCyph");
 		setLookAndFeel();
-
+		Image icon = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/icons/EqucyphIcon.png"));
+		this.setIconImage(icon);
 		tabPlanes = new HashMap<>();  // Initialize the HashMap
 
 		functions_tree = new JTree();
