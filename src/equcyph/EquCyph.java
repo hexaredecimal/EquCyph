@@ -403,11 +403,14 @@ public class EquCyph extends JFrame implements ActionListener {
 					= """
 <html>
 	<h1 align="center">Equcyph</h1>
-	<h3>Lead developer</h3>
-	<p><b>Hexaredecimal</b></p>
+	<h2>Lead developer</h2>
+	<p><b>Gama Sibusiso</b> 
+    <ul type="disk">
+       <li><a href="https://github.com/hexaredecimal/">https://github.com/hexaredecimal/</a></li>
+    </ul>
+  </p>
 	<br>
-	<h3>Contributors</h3>
-	<p><b>Hugs_Coding</b></p>
+  <h5> Product of Hexarevision Tech © </h5><br>
 </htaml>
 """;
 				JOptionPane.showMessageDialog(this, message, invoker, JOptionPane.INFORMATION_MESSAGE);
