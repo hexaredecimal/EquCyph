@@ -63,7 +63,31 @@ public class EquCyph extends JFrame implements ActionListener {
 			menubar.add(file);
 
 			JMenuItem newSession = new JMenuItem("New Session", project_icon);
-			newSession.addActionListener(this);
+			newSession.addActionListener(action -> {
+				var root = functions_tree.getModel().getRoot(); 
+				int child_count = functions_tree.getModel().getChildCount(root);
+				
+				if (child_count > 0) {
+					String msg = String.format(
+						"Are you sure you want to clear %d function%s and start a new project?",
+						child_count, 
+						child_count == 1 ? "" : "s");
+
+					int option = JOptionPane.showConfirmDialog(this, msg, "Clear All", JOptionPane.YES_NO_OPTION);
+					if (option == JOptionPane.NO_OPTION) {
+						return; 
+					}
+				}
+				
+				var keys = tabPlanes.keySet(); 
+				for (var key: keys) {
+					var plane = tabPlanes.get(key); 
+					plane.getFunctionList().clear();
+				}
+				tabs.removeAll();
+				addTab(tabs);
+				populateTree();
+			});
 
 			JMenuItem openSession = new JMenuItem("Open Session", open_icon);
 			openSession.addActionListener(this);
