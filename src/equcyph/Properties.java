@@ -85,7 +85,7 @@ public class Properties extends javax.swing.JFrame {
     tf_fx_def = new javax.swing.JTextField();
     lbl_error = new javax.swing.JLabel();
 
-    setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+    setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
     setTitle("Properties");
 
     jLabel1.setFont(new java.awt.Font("sansserif", 1, 13)); // NOI18N
